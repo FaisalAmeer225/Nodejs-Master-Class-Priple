@@ -6,7 +6,32 @@ const https = require("https");
 const fs = require("fs");
 const url = require("url");
 const StringDecoder = require("string_decoder").StringDecoder;
-const config = require("./config");
+const config = require("./lib/config");
+const _data = require("./lib/data");
+const handlers = require("./lib/handlers");
+const helpers = require("./lib/helpers");
+
+//Testing
+// @TODO delete this
+
+//to read file
+// _data.read("test", "newFile", function (err, data) {
+//   console.log("this was the err", err, "this was the data", data);
+// });
+// to write file
+// _data.create("test", "newFile", { foo: "baar" }, function (err) {
+//   console.log("this was the err", err);
+// });
+
+//Update file
+// _data.update("test", "newFile", { fisszzz: "buzz" }, function (err) {
+//   console.log("this was the err", err);
+// });
+
+//DeleteFile
+//_data.delete("test", "newFile", function (err) {
+// console.log("this was the err", err);
+//});
 
 // This instiantate the http server
 const httpServer = http.createServer(function (req, res) {
@@ -17,6 +42,8 @@ const httpServer = http.createServer(function (req, res) {
 httpServer.listen(config.httpPort, function () {
   console.log(`The server is listening on ${config.httpPort} in mode`);
 });
+
+// This instiantate the https server
 const httpsServerOptions = {
   key: fs.readFileSync("./https/key.pem"),
   cert: fs.readFileSync("./https/cert.pem"),
@@ -72,7 +99,7 @@ const unifiedServer = function (req, res) {
       queryStringObject: queryStringObject,
       mehtod: method,
       headers: headers,
-      payload: buffer,
+      payload: helpers.parseJsonToObject(buffer),
     };
 
     // route the request to the handler specified in the router
@@ -95,20 +122,26 @@ const unifiedServer = function (req, res) {
     });
   });
 };
-
-const handlers = {};
-
-//sample handlers
-
-handlers.sample = function (data, callback) {
-  //callback a http status code, and payload object
-  callback(406, { name: "sample handler" });
-};
-
-//not found handler
-handlers.notFound = function (data, callback) {
-  callback(404);
-};
+// Define a request router
 const router = {
   sample: handlers.sample,
+  ping: handlers.ping,
+  users: handlers.users,
 };
+
+// const handlers = {};
+
+// //sample handlers
+
+// handlers.sample = function (data, callback) {
+//   //callback a http status code, and payload object
+//   callback(406, { name: "sample handler" });
+// };
+
+// //not found handler
+// handlers.notFound = function (data, callback) {
+//   callback(404);
+// };
+// const router = {
+//   sample: handlers.sample,
+// };
