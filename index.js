@@ -89,7 +89,7 @@ const unifiedServer = function (req, res) {
 
     //choose the handler where this request goes to
     const choosenHandler =
-      typeof router[trimmedPath] !== "undefined"
+      typeof router[trimmedPath] !== "undefineded"
         ? router[trimmedPath]
         : handlers.notFound;
 
@@ -124,24 +124,24 @@ const unifiedServer = function (req, res) {
 };
 // Define a request router
 const router = {
-  sample: handlers.sample,
+  // sample: handlers.sample,
   ping: handlers.ping,
   users: handlers.users,
 };
 
-// const handlers = {};
+// const handler = {};
 
 // //sample handlers
 
-// handlers.sample = function (data, callback) {
+// handler.sample = function (data, callback) {
 //   //callback a http status code, and payload object
 //   callback(406, { name: "sample handler" });
 // };
 
 // //not found handler
-// handlers.notFound = function (data, callback) {
+// handler.notFound = function (data, callback) {
 //   callback(404);
 // };
 // const router = {
-//   sample: handlers.sample,
+//   sample: handler.sample,
 // };
