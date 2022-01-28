@@ -60,24 +60,24 @@ httpsServer.listen(config.httpsPort, function () {
 
 const unifiedServer = function (req, res) {
   // Parse the url
-  const parsedUrl = url.parse(req.url, true);
+  var parsedUrl = url.parse(req.url, true);
 
   // Get the path
-  const path = parsedUrl.pathname;
-  const trimmedPath = path.replace(/^\/+|\/+$/g, "");
+  var path = parsedUrl.pathname;
+  var trimmedPath = path.replace(/^\/+|\/+$/g, "");
 
   // Get the query string as an object
-  const queryStringObject = parsedUrl.query;
+  var queryStringObject = parsedUrl.query;
 
   // Get the HTTP method
-  const method = req.method.toLowerCase();
+  var method = req.method.toLowerCase();
 
   //Get the headers as an object
-  const headers = req.headers;
+  var headers = req.headers;
 
   // Get the payload,if any
-  const decoder = new StringDecoder("utf-8");
-  const buffer = "";
+  var decoder = new StringDecoder("utf-8");
+  var buffer = "";
   req.on("data", function (data) {
     buffer += decoder.write(data);
   });
@@ -85,13 +85,13 @@ const unifiedServer = function (req, res) {
     buffer += decoder.end();
 
     // Check the router for a matching path for a handler. If one is not found, use the notFound handler instead.
-    const chosenHandler =
+    var chosenHandler =
       typeof router[trimmedPath] !== "undefined"
         ? router[trimmedPath]
         : handlers.notFound;
 
     // Construct the data object to send to the handler
-    const data = {
+    var data = {
       trimmedPath: trimmedPath,
       queryStringObject: queryStringObject,
       method: method,
@@ -108,7 +108,7 @@ const unifiedServer = function (req, res) {
       payload = typeof payload == "object" ? payload : {};
 
       // Convert the payload to a string
-      const payloadString = JSON.stringify(payload);
+      var payloadString = JSON.stringify(payload);
 
       // Return the response
       res.setHeader("Content-Type", "application/json");
